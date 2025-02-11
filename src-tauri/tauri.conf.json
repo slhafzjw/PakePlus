@@ -1,22 +1,9 @@
 {
     "$schema": "https://schema.tauri.app/config/2",
-    "productName": "PakePlus",
-    "version": "../package.json",
-    "identifier": "com.pakeplus.app",
-    "build": {
-        "beforeDevCommand": "pnpm dev",
-        "devUrl": "http://localhost:1420",
-        "beforeBuildCommand": "pnpm build",
-        "frontendDist": "../dist"
-    },
+    "productName": "Stirling-PDF",
+    "version": "0.5.0",
+    "identifier": "work.slhaf.pake.pdf",
     "app": {
-        "windows": [
-            {
-                "title": "PakePlus",
-                "width": 920,
-                "height": 680
-            }
-        ],
         "security": {
             "assetProtocol": {
                 "enable": true,
@@ -29,12 +16,11 @@
                 }
             },
             "csp": "default-src 'self' 'unsafe-inline' 'unsafe-eval' ipc: http://ipc.localhost; img-src 'self' asset: http://asset.localhost blob: data: http://asset.localhost; font-src 'self' asset: http//localhost data:;"
-        },
-        "withGlobalTauri": true
+        }
     },
     "bundle": {
         "active": true,
-        "targets": "all",
+        "targets": ["deb", "appimage", "nsis", "app", "dmg"],
         "resources": ["./data/*"],
         "icon": [
             "icons/32x32.png",
