@@ -1,7 +1,12 @@
 // Learn more about Tauri commands at https://tauri.app/develop/calling-rust/
 
 mod command;
-use tauri::menu::*;
+use serde_json::Error;
+use tauri::{menu::*, utils::config::WindowConfig};
+
+fn json_to_window_config(window_json: &str) -> Result<WindowConfig, Error> {
+    serde_json::from_str(window_json)
+}
 
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
 pub fn run() {
@@ -28,6 +33,24 @@ pub fn run() {
             );
             menu
         })
+        .setup(|app| {
+            let app_handle = app.handle();
+            let window_json = r#"{"label":"cxstudy","title":"学习通","url":"https://i.chaoxing.com","userAgent":"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/130.0.0.0 Safari/537.36","width":1920,"height":1080,"theme":null,"resizable":true,"fullscreen":false,"maximized":false,"minWidth":400,"minHeight":300,"maxWidth":1920,"maxHeight":1080,"decorations":true,"transparent":false,"titleBarStyle":"Visible","visible":true,"focus":true,"closable":true,"minimizable":true,"maximizable":true,"alwaysOnTop":false,"alwaysOnBottom":false,"center":false,"skipTaskbar":false,"tabbingIdentifier":null,"parent":null,"dragDropEnabled":true,"browserExtensionsEnabled":false,"devtools":true,"contentProtected":false,"hiddenTitle":false,"incognito":false,"proxyUrl":null,"useHttpsScheme":false,"zoomHotkeysEnabled":false,"acceptFirstMouse":false}"#;
+            match json_to_window_config(window_json) {
+                Ok(config) => {
+                    println!("Parsed WindowConfig: {:?}", config);
+                    let _main_window =
+                        tauri::WebviewWindowBuilder::from_config(app_handle, &config)
+                            .unwrap()
+                            .build()
+                            .unwrap();
+                }
+                Err(err) => {
+                    eprintln!("Failed to parse JSON: {}", err);
+                }
+            }
+            Ok(())
+        })
         .plugin(tauri_plugin_opener::init())
         .plugin(tauri_plugin_os::init())
         .plugin(tauri_plugin_fs::init())
@@ -42,7 +65,6 @@ pub fn run() {
             command::pakeplus::update_config_file,
             command::pakeplus::update_cargo_file,
             command::pakeplus::update_main_rust,
-            command::pakeplus::rust_lib_window,
             command::pakeplus::update_custom_js,
             command::pakeplus::content_to_base64,
             command::pakeplus::update_config_json,
