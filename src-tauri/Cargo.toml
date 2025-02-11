@@ -1,8 +1,8 @@
 [package]
-name = "PakePlus"
-version = "0.1.0"
-description = "A Tauri App"
-authors = ["you"]
+name = "Stirling-PDF"
+version = "0.5.0"
+description = ""
+authors = ["1024xiaoshen"]
 edition = "2021"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
@@ -29,4 +29,3 @@ tauri-plugin-shell = "2.0.0"
 tauri-plugin-dialog = "2.0.0"
 tauri-plugin-http = { version = "2", features = ["unsafe-headers"] }
 tauri-plugin-clipboard-manager = "2.0.0"
-
